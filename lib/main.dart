@@ -37,6 +37,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final TextEditingController _passwordController = TextEditingController();
   // 登录类型，父母登录还是孩子登录
   bool _isParentLogin = false;
+  //登录加载状态
+  bool _isLoading = false;
   late AnimationController _animationController;
   late Animation<double> _bounceAnimation;
 
@@ -450,13 +452,27 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     );
   }
 
-  void _login() {
-    if (_usernameController.text.trim().isEmpty) {
+  void _login() async {
+    final String username = _usernameController.text.trim();
+    final String password = _passwordController.text.trim();
+    if (username.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('请输入用户名'),
       ));
       return;
     }
+    if (password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('请输入密码'),
+      ));
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    //
 
     Navigator.pushReplacement(
       context,
