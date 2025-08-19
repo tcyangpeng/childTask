@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/home.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(const MyApp());
@@ -472,14 +474,49 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       _isLoading = true;
     });
 
-    //
+    //登录，暂模拟
+    try {
+      final response = await http.post(
+        Uri.parse('https://api.example.com/login'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'username': username,
+          'password': password,
+          'userType': _isParentLogin ? 'parent' : 'child',
+        }),
+      );
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            HomePage(userName: _usernameController.text.trim()),
-      ),
-    );
+      if (response.statusCode == 200) {
+        // 登录成功
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('登录成功'),
+        ));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                HomePage(userName: _usernameController.text.trim()),
+          ),
+        );
+      } else {
+        // 登录失败
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('登录失败: ${response.body}'),
+        ));
+      }
+    } catch (error) {
+      // 登录失败
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('登录失败: $error'),
+      ));
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }
