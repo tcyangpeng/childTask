@@ -8,145 +8,117 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //当前tab
-  int _currentIndex = 0;
-  //当前积分
-  int _points = 0;
+  int _todayPints = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF4F46E5),
-              Color(0xFFA855F7),
-              Color(0xFFEC4899),
-            ],
-          ),
-        ),
-        child: _currentIndex == 0 ? _buildHomePage() : _buildOtherPage(),
+      appBar: AppBar(
+        title: Text('今天'),
+        elevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87,
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
-    );
-  }
-
-  AppBar _buildAppBar() {
-    return AppBar(
-      //不自动显示返回按钮
-      automaticallyImplyLeading: false,
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color(0xFF4F46E5),
-              Color(0xFFA855F7),
-              Color(0xFFEC4899),
-            ],
-          ),
-        ),
-      ),
-      title: Row(
+      body: Column(
         children: [
-          Icon(
-            Icons.star,
-            color: Colors.yellow,
-          ),
-          SizedBox(
-            width: 8,
-          ),
-          Text("小任务，大奖励",
-              style: TextStyle(
-                color: Colors.yellow,
-                fontSize: 16,
-              ))
-        ],
-      ),
-      actions: [
-        Container(
-          margin: EdgeInsets.only(right: 8),
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.diamond,
-                color: Colors.yellow,
-                size: 16,
-              ),
-              SizedBox(
-                width: 4,
-              ),
-              Text(
-                "$_points",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(right: 16),
-          child: CircleAvatar(
-            radius: 20,
-            backgroundColor: Colors.white,
-            child: Icon(
-              Icons.person,
-              color: Color(0xFF4F46E5),
+          SizedBox(height: 16),
+          Text(
+            "加油，小小冒险家",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey.shade400,
             ),
           ),
-        ),
-      ],
+          SizedBox(height: 16),
+          _buildPointsCard(),
+          SizedBox(height: 8),
+          _buildTasKTitle(),
+          SizedBox(height: 8),
+          Expanded(child: child),
+        ],
+      ),
     );
   }
 
-  Widget _buildHomePage() {
-    return Container();
+  Widget _buildPointsCard() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.lightBlue,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text("今日得分",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              )),
+          SizedBox(height: 8),
+          Text(
+            "$_todayPints 分",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          )
+        ],
+      ),
+    );
   }
 
-  Widget _buildOtherPage() {
-    return Container();
+  Widget _buildTasKTitle() {
+    return Padding(
+        padding: EdgeInsets.only(left: 16),
+        child: Text(
+          "今日任务",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ));
   }
 
-  BottomNavigationBar _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      currentIndex: _currentIndex,
-      onTap: (index) {
-        setState(() {
-          _currentIndex = index;
-        });
+  Widget _buildTaskList() {
+    return ListView.builder(
+      itemCount: 5,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text('任务 $index'),
+          trailing: Icon(Icons.arrow_forward),
+        );
       },
-      type: BottomNavigationBarType.fixed,
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: '首页',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.task_alt),
-          label: '任务',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.card_giftcard),
-          label: '积分',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: '我的',
-        ),
-      ],
-      selectedItemColor: Color(0xFF4F46E5),
-      unselectedItemColor: Colors.grey,
-      backgroundColor: Colors.white,
-      elevation: 8,
     );
   }
+  // Widget _buildBottomBar() {
+  //   return BottomNavigationBar(
+  //     items: const <BottomNavigationBarItem>[
+  //       BottomNavigationBarItem(
+  //         icon: Icon(Icons.home),
+  //         label: '首页',
+  //       ),
+  //       BottomNavigationBarItem(
+  //         icon: Icon(Icons.store),
+  //         label: '积分',
+  //       ),
+  //       BottomNavigationBarItem(
+  //         icon: Icon(Icons.person),
+  //         label: '我的',
+  //       ),
+  //     ],
+  //     currentIndex: _currentIndex,
+  //     selectedItemColor: Colors.lightBlue,
+  //     unselectedItemColor: Colors.grey,
+  //     type: BottomNavigationBarType.fixed,
+  //     iconSize: 24,
+  //     onTap: _onBottomBarTapped,
+  //   );
+  // }
 }
