@@ -48,7 +48,13 @@ class _PointsPageState extends State<PointsPages> {
         ),
         child: Column(
           children: [
-            Text('当前积分：1000'),
+            CirclePonintWidget(points: 150),
+            SizedBox(height: 10),
+            TodayDataWidget(todaypoints: 100, todayCompleteNum: 10),
+            SizedBox(
+              height: 10,
+            ),
+            PointTrendWidget()
           ],
         ),
       ),
@@ -295,6 +301,26 @@ class _PointTrendWidgetState extends State<PointTrendWidget> {
         widget.seriesList,
         animate: true,
         animationDuration: Duration(seconds: 1),
+        barRendererDecorator: charts.BarLabelDecorator<String>(
+          labelPosition: charts.BarLabelPosition.auto,
+          labelAnchor: charts.BarLabelAnchor.middle,
+        ),
+        domainAxis: charts.OrdinalAxisSpec(
+          renderSpec: charts.SmallTickRendererSpec(
+            labelStyle: charts.TextStyleSpec(
+              fontSize: 12,
+              color: charts.MaterialPalette.black,
+            ),
+          ),
+        ),
+        primaryMeasureAxis: charts.NumericAxisSpec(
+          renderSpec: charts.SmallTickRendererSpec(
+            labelStyle: charts.TextStyleSpec(
+              fontSize: 10,
+              color: charts.MaterialPalette.black,
+            ),
+          ),
+        ),
       ),
     );
   }
